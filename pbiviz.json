@@ -1,0 +1,27 @@
+{
+  "visual": {
+    "name": "codexStatusTimeline",
+    "displayName": "Codex Status Timeline",
+    "guid": "codexStatusTimelineB3FCCC5896D2422F88DAED0691243840",
+    "visualClassName": "Visual",
+    "version": "1.0.0.0",
+    "description": "One strip per machine, person or ticket showing which state it was in over time, built from change events, with time-in-state totals.",
+    "supportUrl": "https://nexuscodex.nexus/support",
+    "gitHubUrl": ""
+  },
+  "apiVersion": "5.11.2",
+  "author": {
+    "name": "Nexus Codex",
+    "email": "harmsolo@nexuscodex.nexus"
+  },
+  "assets": {
+    "icon": "assets/icon.png"
+  },
+  "externalJS": null,
+  "style": "style/visual.less",
+  "capabilities": "capabilities.json",
+  "stringResources": [
+    "stringResources/en-US/resources.resjson"
+  ],
+  "version": "1.0.0.0"
+}

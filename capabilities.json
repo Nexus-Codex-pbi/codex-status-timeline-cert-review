@@ -1,0 +1,634 @@
+{
+  "dataRoles": [
+    {
+      "displayName": "Resource",
+      "displayNameKey": "Role_Resource",
+      "name": "resource",
+      "kind": "Grouping",
+      "description": "The machine, person or ticket: one strip each",
+      "descriptionKey": "Role_Resource_Desc"
+    },
+    {
+      "displayName": "Timestamp",
+      "displayNameKey": "Role_Timestamp",
+      "name": "timestamp",
+      "kind": "Grouping",
+      "description": "When the state changed: a date/time column (not the date hierarchy)",
+      "descriptionKey": "Role_Timestamp_Desc"
+    },
+    {
+      "displayName": "State",
+      "displayNameKey": "Role_State",
+      "name": "state",
+      "kind": "Grouping",
+      "description": "The state the resource entered at that time",
+      "descriptionKey": "Role_State_Desc"
+    },
+    {
+      "displayName": "State order",
+      "displayNameKey": "Role_StateOrder",
+      "name": "stateOrder",
+      "kind": "Measure",
+      "description": "Optional number per state: states draw in this order, lowest first (the first is the resting state)",
+      "descriptionKey": "Role_StateOrder_Desc"
+    },
+    {
+      "displayName": "As of",
+      "displayNameKey": "Role_AsOf",
+      "name": "asOf",
+      "kind": "Measure",
+      "description": "Optional date/time where every last run ends, for example a snapshot date. Without it, the latest event",
+      "descriptionKey": "Role_AsOf_Desc"
+    },
+    {
+      "displayName": "Tooltips",
+      "displayNameKey": "Role_Tooltips",
+      "name": "tooltips",
+      "kind": "Measure",
+      "description": "Extra fields shown in the tooltip of each run",
+      "descriptionKey": "Role_Tooltips_Desc"
+    }
+  ],
+  "dataViewMappings": [
+    {
+      "conditions": [
+        {
+          "resource": {
+            "max": 1
+          },
+          "timestamp": {
+            "max": 1
+          },
+          "state": {
+            "max": 1
+          },
+          "stateOrder": {
+            "max": 1
+          },
+          "asOf": {
+            "max": 1
+          }
+        }
+      ],
+      "categorical": {
+        "categories": {
+          "select": [
+            {
+              "bind": {
+                "to": "resource"
+              }
+            },
+            {
+              "bind": {
+                "to": "timestamp"
+              }
+            },
+            {
+              "bind": {
+                "to": "state"
+              }
+            }
+          ],
+          "dataReductionAlgorithm": {
+            "top": {
+              "count": 30000
+            }
+          }
+        },
+        "values": {
+          "select": [
+            {
+              "bind": {
+                "to": "stateOrder"
+              }
+            },
+            {
+              "bind": {
+                "to": "asOf"
+              }
+            },
+            {
+              "for": {
+                "in": "tooltips"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "objects": {
+    "statusTimeline": {
+      "displayName": "Status timeline",
+      "displayNameKey": "Card_StatusTimeline",
+      "properties": {
+        "style": {
+          "displayName": "Style",
+          "displayNameKey": "Prop_Style",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Block strips",
+                "value": "blocks"
+              },
+              {
+                "displayName": "Runs and state totals",
+                "value": "runs"
+              },
+              {
+                "displayName": "Current state board",
+                "value": "board"
+              }
+            ]
+          }
+        },
+        "sortStrips": {
+          "displayName": "Sort strips",
+          "displayNameKey": "Prop_SortStrips",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Automatic",
+                "value": "auto"
+              },
+              {
+                "displayName": "As received",
+                "value": "data"
+              },
+              {
+                "displayName": "Name",
+                "value": "name"
+              },
+              {
+                "displayName": "Current state",
+                "value": "currentState"
+              },
+              {
+                "displayName": "Time in current state",
+                "value": "timeInState"
+              }
+            ]
+          }
+        },
+        "showTotals": {
+          "displayName": "Show totals",
+          "displayNameKey": "Prop_ShowTotals",
+          "type": {
+            "bool": true
+          }
+        },
+        "showLegend": {
+          "displayName": "Show legend",
+          "displayNameKey": "Prop_ShowLegend",
+          "type": {
+            "bool": true
+          }
+        },
+        "showSubtitle": {
+          "displayName": "Show subtitle",
+          "displayNameKey": "Prop_ShowSubtitle",
+          "type": {
+            "bool": true
+          }
+        },
+        "stateOrder": {
+          "displayName": "State order",
+          "displayNameKey": "Prop_StateOrder",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "First seen",
+                "value": "firstSeen"
+              },
+              {
+                "displayName": "Alphabetical",
+                "value": "alphabetical"
+              },
+              {
+                "displayName": "Custom list",
+                "value": "custom"
+              }
+            ]
+          }
+        },
+        "customOrder": {
+          "displayName": "Custom order",
+          "displayNameKey": "Prop_CustomOrder",
+          "type": {
+            "text": true
+          }
+        },
+        "restingAsTrack": {
+          "displayName": "First state as track",
+          "displayNameKey": "Prop_RestingAsTrack",
+          "type": {
+            "bool": true
+          }
+        },
+        "alwaysShow": {
+          "displayName": "Always show",
+          "displayNameKey": "Prop_AlwaysShow",
+          "description": "States that are always drawn in Block strips, even when another state has more time in the block (comma separated)",
+          "descriptionKey": "Prop_AlwaysShow_Desc",
+          "type": {
+            "text": true
+          }
+        },
+        "timeGrain": {
+          "displayName": "Block size",
+          "displayNameKey": "Prop_TimeGrain",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Automatic",
+                "value": "auto"
+              },
+              {
+                "displayName": "Hour",
+                "value": "hour"
+              },
+              {
+                "displayName": "Day",
+                "value": "day"
+              },
+              {
+                "displayName": "Week",
+                "value": "week"
+              },
+              {
+                "displayName": "Month",
+                "value": "month"
+              },
+              {
+                "displayName": "Quarter",
+                "value": "quarter"
+              },
+              {
+                "displayName": "Year",
+                "value": "year"
+              }
+            ]
+          }
+        },
+        "durationUnit": {
+          "displayName": "Duration unit",
+          "displayNameKey": "Prop_DurationUnit",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Automatic",
+                "value": "auto"
+              },
+              {
+                "displayName": "Minutes",
+                "value": "minutes"
+              },
+              {
+                "displayName": "Hours",
+                "value": "hours"
+              },
+              {
+                "displayName": "Days",
+                "value": "days"
+              },
+              {
+                "displayName": "Weeks",
+                "value": "weeks"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "stateColours": {
+      "displayName": "State colours",
+      "displayNameKey": "Card_StateColours",
+      "properties": {
+        "accent": {
+          "displayName": "State colour",
+          "displayNameKey": "Prop_Accent",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "track": {
+          "displayName": "First state colour",
+          "displayNameKey": "Prop_Track",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "labels": {
+      "displayName": "Labels",
+      "displayNameKey": "Card_Labels",
+      "properties": {
+        "labelFontFamily": {
+          "displayName": "Font Family",
+          "displayNameKey": "Prop_FontFamily",
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "labelFontSize": {
+          "displayName": "Font Size",
+          "displayNameKey": "Prop_FontSize",
+          "type": {
+            "formatting": {
+              "fontSize": true
+            }
+          }
+        },
+        "labelBold": {
+          "displayName": "Bold",
+          "displayNameKey": "Prop_Bold",
+          "type": {
+            "bool": true
+          }
+        },
+        "labelItalic": {
+          "displayName": "Italic",
+          "displayNameKey": "Prop_Italic",
+          "type": {
+            "bool": true
+          }
+        },
+        "labelUnderline": {
+          "displayName": "Underline",
+          "displayNameKey": "Prop_Underline",
+          "type": {
+            "bool": true
+          }
+        },
+        "textColor": {
+          "displayName": "Text colour",
+          "displayNameKey": "Prop_TextColor",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "titleSettings": {
+      "displayName": "Visual Title",
+      "displayNameKey": "Card_Title",
+      "properties": {
+        "showTitle": {
+          "displayName": "Show Title",
+          "displayNameKey": "Prop_ShowTitle",
+          "type": {
+            "bool": true
+          }
+        },
+        "titleText": {
+          "displayName": "Title Text",
+          "displayNameKey": "Prop_TitleText",
+          "type": {
+            "text": true
+          }
+        },
+        "titleFontFamily": {
+          "displayName": "Font Family",
+          "displayNameKey": "Prop_FontFamily",
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "titleFontSize": {
+          "displayName": "Font Size",
+          "displayNameKey": "Prop_FontSize",
+          "type": {
+            "formatting": {
+              "fontSize": true
+            }
+          }
+        },
+        "titleBold": {
+          "displayName": "Bold",
+          "displayNameKey": "Prop_Bold",
+          "type": {
+            "bool": true
+          }
+        },
+        "titleItalic": {
+          "displayName": "Italic",
+          "displayNameKey": "Prop_Italic",
+          "type": {
+            "bool": true
+          }
+        },
+        "titleUnderline": {
+          "displayName": "Underline",
+          "displayNameKey": "Prop_Underline",
+          "type": {
+            "bool": true
+          }
+        },
+        "titleAlign": {
+          "displayName": "Alignment",
+          "displayNameKey": "Prop_Alignment",
+          "type": {
+            "formatting": {
+              "alignment": true
+            }
+          }
+        },
+        "titleColor": {
+          "displayName": "Font Color",
+          "displayNameKey": "Prop_FontColor",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "background": {
+      "displayName": "Background",
+      "displayNameKey": "Card_Background",
+      "properties": {
+        "show": {
+          "displayName": "Show background",
+          "displayNameKey": "Prop_ShowBackground",
+          "type": {
+            "bool": true
+          }
+        },
+        "backgroundColor": {
+          "displayName": "Background Colour",
+          "displayNameKey": "Prop_BackgroundColor",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "transparency": {
+          "displayName": "Transparency",
+          "displayNameKey": "Prop_Transparency",
+          "type": {
+            "numeric": true
+          }
+        }
+      }
+    },
+    "codexTheme": {
+      "displayName": "Nexus Codex Theme",
+      "displayNameKey": "Card_CodexTheme",
+      "properties": {
+        "mode": {
+          "displayName": "Mode",
+          "displayNameKey": "Prop_Mode",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Automatic",
+                "value": "auto"
+              },
+              {
+                "displayName": "Dark",
+                "value": "dark"
+              },
+              {
+                "displayName": "Light",
+                "value": "light"
+              }
+            ]
+          }
+        },
+        "surfaceTransparency": {
+          "displayName": "Surface Transparency",
+          "displayNameKey": "Prop_SurfaceTransparency",
+          "type": {
+            "numeric": true
+          }
+        },
+        "neon": {
+          "displayName": "Neon Glow",
+          "displayNameKey": "Prop_Neon",
+          "type": {
+            "bool": true
+          }
+        },
+        "neonColor": {
+          "displayName": "Flare Colour",
+          "displayNameKey": "Prop_NeonColor",
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "neonScope": {
+          "displayName": "Neon Applies To",
+          "displayNameKey": "Prop_NeonScope",
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Flare colour only",
+                "value": "flare"
+              },
+              {
+                "displayName": "All selected colours",
+                "value": "all"
+              }
+            ]
+          }
+        },
+        "glowStrength": {
+          "displayName": "Glow Strength",
+          "displayNameKey": "Prop_GlowStrength",
+          "type": {
+            "numeric": true
+          }
+        }
+      }
+    },
+    "contentPadding": {
+      "displayName": "Content padding",
+      "displayNameKey": "ContentPadding_Card",
+      "properties": {
+        "top": {
+          "displayName": "Top",
+          "displayNameKey": "ContentPadding_Top",
+          "type": {
+            "numeric": true
+          }
+        },
+        "right": {
+          "displayName": "Right",
+          "displayNameKey": "ContentPadding_Right",
+          "type": {
+            "numeric": true
+          }
+        },
+        "bottom": {
+          "displayName": "Bottom",
+          "displayNameKey": "ContentPadding_Bottom",
+          "type": {
+            "numeric": true
+          }
+        },
+        "left": {
+          "displayName": "Left",
+          "displayNameKey": "ContentPadding_Left",
+          "type": {
+            "numeric": true
+          }
+        }
+      }
+    },
+    "licence": {
+      "displayName": "Licence",
+      "displayNameKey": "Card_Licence",
+      "properties": {
+        "key": {
+          "displayName": "Suite key",
+          "displayNameKey": "Prop_SuiteKey",
+          "type": {
+            "text": true
+          }
+        }
+      }
+    }
+  },
+  "supportsHighlight": false,
+  "supportsKeyboardFocus": true,
+  "supportsLandingPage": true,
+  "supportsEmptyDataView": true,
+  "supportsMultiVisualSelection": true,
+  "tooltips": {
+    "supportedTypes": {
+      "default": true,
+      "canvas": true
+    },
+    "roles": [
+      "tooltips"
+    ]
+  },
+  "privileges": []
+}
